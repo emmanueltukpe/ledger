@@ -1,15 +1,15 @@
 import { Schema, model } from "mongoose";
 
 var AccountSchema = new Schema({
-  accountName: {
+  account_name: {
     type: String,
     required: [true, "please provide your name"],
   },
-  accountNumber: {
+  account_number: {
     type: String,
     required: true,
   },
-  accountBalance: {
+  account_balance: {
     type: Number,
     default: 0,
   },

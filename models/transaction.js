@@ -2,23 +2,23 @@ import { Schema, model, Types } from "mongoose";
 
 var TransactionSchema = new Schema(
   {
-    descriptionOfTransaction: {
+    description: {
       type: String
     },
-    valueOfTransaction: {
+    amount: {
       type: Number,
       require: true,
     },
-    clientAccount: {
+    recipient: {
       type: Number,
       required: true,
     },
-    createdBy: {
+    sender: {
       type: Types.ObjectId,
       ref: "Account",
       required: true,
     },
-    typeOfTransaction: {
+    type: {
         type: String,
         enum: ['Debit', 'Credit', 'Reversal'],
         required: true
