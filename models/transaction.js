@@ -10,8 +10,9 @@ var TransactionSchema = new Schema(
       require: true,
     },
     recipient: {
-      type: Number,
-      required: true,
+        type: Types.ObjectId,
+        ref: "Account",
+        required: true,
     },
     sender: {
       type: Types.ObjectId,
