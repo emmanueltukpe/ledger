@@ -1,19 +1,25 @@
-require('dotenv').config();
-require('express-async-errors');
-
-const express = require('express');
+require("dotenv").config();
+require("express-async-errors");
+const express = require("express");
 const app = express();
-
+const router = require("./routes/index");
 // database
-const connectDB = require('./db/connect');
+const connectDB = require("./db/connect");
 
 // error handler
-const notFoundMiddleware = require('./middleware/not-found');
-const errorHandlerMiddleware = require('./middleware/error-handler');
+const notFoundMiddleware = require("./middleware/not-found");
+const errorHandlerMiddleware = require("./middleware/error-handler");
 
-app.get('/', (req, res) => {
-  res.send('<h1>Ledger</h1>');
+app.use(express.json());
+app.use(express.urlencoded({
+  extended: true
+}))
+
+app.get("/", (req, res) => {
+  res.send("<h1>Ledger</h1>");
 });
+
+app.use("/api/v1", router);
 
 // middleware
 app.use(notFoundMiddleware);
