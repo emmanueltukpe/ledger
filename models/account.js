@@ -1,18 +1,25 @@
-import { Schema, model } from "mongoose";
+const mongoose = require('mongoose')
 
-var AccountSchema = new Schema({
+var AccountSchema = new mongoose.Schema({
   account_name: {
     type: String,
-    required: [true, "please provide your name"],
+    required: [true, "please provide your name"]
   },
   account_number: {
     type: String,
-    required: true,
+    unique: true,
+    maxlength: 10,
+    minlengeth: 10,
   },
   account_balance: {
     type: Number,
     default: 0,
   },
+  account_status: {
+    type: String,
+    enum: ['Active', 'Inactive'],
+    default: 'Active'
+  }
 });
 
-module.exports = model("Account", AccountSchema);
+module.exports = mongoose.model("Account", AccountSchema);
