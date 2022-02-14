@@ -38,7 +38,7 @@ const disableAccount = async (req, res) => {
     params: { id: accountID },
   } = req;
   
-  if ((account_status === "Active") || (account_status === "Inactive")) {
+  if (["Active", "Inactive"].includes(account_status)) {
     const account = await Account.findOneAndUpdate({ _id: accountID }, req.body, {
         new: true,
         runValidators: true,
