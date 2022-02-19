@@ -3,4 +3,4 @@
 The two apis to exist 
 the account - where the customer creates an account and transactions
 
-![](images/Ledger.drawio(1).png)
+![](images/Ledger.drawio.png)

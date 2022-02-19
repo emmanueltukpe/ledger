@@ -1,22 +1,25 @@
+//@ts-check
 require("dotenv").config();
 require("express-async-errors");
 const express = require("express");
 const app = express();
 const router = require("./routes/index");
 // database
-const connectDB = require("./db/connect");
+const connectDB = require("./db/index");
 
 // error handler
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 
 app.use(express.json());
-app.use(express.urlencoded({
-  extended: true
-}))
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
 
 app.get("/", (req, res) => {
-  res.send("<h1>Ledger</h1>");
+  res.send("Ledger");
 });
 
 app.use("/api/v1", router);
