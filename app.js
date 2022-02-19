@@ -1,11 +1,12 @@
 //@ts-check
 require("dotenv").config();
 require("express-async-errors");
+const http = require("http");
 const express = require("express");
-const app = express();
 
-const accountRouter = require("./routes/accountRoutes");
-const transactionRouter = require("./routes/transactionRoutes");
+const app = express();
+const accountRouter = require("./routes/accounts");
+const transfersRouter = require("./routes/transfers");
 
 // database
 const connectDB = require("./db/index");
@@ -25,8 +26,8 @@ app.get("/", (req, res) => {
   res.send("Ledger");
 });
 
-app.use("/api/v1", accountRouter);
-app.use("/api/v1", transactionRouter);
+app.use("/api/v1/accounts", accountRouter);
+app.use("/api/v1/transfers", transfersRouter);
 
 // middleware
 app.use(notFoundMiddleware);
@@ -38,7 +39,8 @@ const start = async () => {
   try {
     await connectDB(process.env.MONGO_URI);
 
-    app.listen(port, () =>
+    const server = http.createServer(app);
+    server.listen(port, () =>
       console.log(`Server is listening on port ${port}...`)
     );
   } catch (error) {
