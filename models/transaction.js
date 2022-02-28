@@ -7,15 +7,16 @@ var TransactionSchema = new Schema(
     },
     amount: {
       type: Number,
-      require: true,
+      required: true,
+      default: 0
     },
     recipient: {
-      type: Types.ObjectId,
+      type: String,
       ref: "Account",
       required: true,
     },
     sender: {
-      type: Types.ObjectId,
+      type: String,
       ref: "Account",
     },
     type: {
