@@ -62,8 +62,8 @@ const deposit = async (req, res) => {
 };
 
 const withdrawal = async (req, res) => {
-  const transaction = await Transaction.create(req.body);
   await checksAccount(req.body.sender, req.body.amount);
+  const transaction = await Transaction.create(req.body);
   res.status(StatusCodes.CREATED).json({ transaction });
 };
 
