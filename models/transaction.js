@@ -13,7 +13,6 @@ var TransactionSchema = new Schema(
     recipient: {
       type: String,
       ref: "Account",
-      required: true,
     },
     sender: {
       type: String,
