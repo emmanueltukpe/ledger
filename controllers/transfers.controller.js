@@ -18,37 +18,30 @@ const credit = async (account_number, amount) => {
   );
 };
 
-/**
- * Debits an account by an amount
- *
- * @param {String} account_number the account number of the account to be debited
- * @param {Number} amount the amount to be debited
- */
-const debit = async (account_number, amount) => {
-  return await Accounts.findOneAndUpdate(
-    { account_number },
-    { $inc: { account_balance: -amount } },
-    { new: true }
-  );
-};
+
 
 /**
  * Checks if the amount requested in the account
- *
+ * If it is not there, it throws an error, if it is, it is debited
+ * It debits the account using the account number
  * @param {String} account_number the account number of the account
  * @param {Number} amount the amount to be debited
  */
-const checksAccount = async (account_number, amount) => {
+const debit = async (account_number, amount) => {
   const account = await Accounts.findOne({ account_number });
   if (account.account_balance < amount) {
     throw new BadRequestError("Insufficient Funds");
   } else {
-    debit(account_number, amount);
+    return await Accounts.findOneAndUpdate(
+      { account_number },
+      { $inc: { account_balance: -amount } },
+      { new: true }
+    );
   }
 };
 
 const transfer = async (req, res) => {
-  await checksAccount(req.body.sender, req.body.amount);
+  await debit(req.body.sender, req.body.amount);
   credit(req.body.recipient, req.body.amount);
   const transaction = await Transaction.create(req.body);
 
@@ -62,7 +55,7 @@ const deposit = async (req, res) => {
 };
 
 const withdrawal = async (req, res) => {
-  await checksAccount(req.body.sender, req.body.amount);
+  await debit(req.body.sender, req.body.amount);
   const transaction = await Transaction.create(req.body);
   res.status(StatusCodes.CREATED).json({ transaction });
 };
