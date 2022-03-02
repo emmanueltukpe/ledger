@@ -67,7 +67,7 @@ const getAccountBalance = async (req, res) => {
   const account = await Account.findOne({ account_number: accountNumber });
   if (!account) {
     throw new NotFoundError(
-      `No account with  ${accountNumber} is registered with us`
+      `account with account number (${accountNumber}) is not registered`
     );
   }
   res.status(StatusCodes.OK).json({ account });
