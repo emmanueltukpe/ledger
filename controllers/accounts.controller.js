@@ -59,7 +59,24 @@ const disableAccount = async (req, res) => {
 
 const getAccounts = async (req, res) => {
   const account = await Account.find();
-  res.status(StatusCodes.CREATED).json({ account });
+  res.status(StatusCodes.OK).json({ account });
 };
 
-module.exports = { createAccount, updateAccount, disableAccount, getAccounts };
+const getAccountBalance = async (req, res) => {
+  const { id: accountNumber } = req.params;
+  const account = await Account.findOne({ account_number: accountNumber });
+  if (!account) {
+    throw new NotFoundError(
+      `No account with  ${accountNumber} is registered with us`
+    );
+  }
+  res.status(StatusCodes.OK).json({ account });
+};
+
+module.exports = {
+  createAccount,
+  updateAccount,
+  disableAccount,
+  getAccounts,
+  getAccountBalance,
+};
