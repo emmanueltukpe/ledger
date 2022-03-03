@@ -24,14 +24,13 @@ const credit = async (account_number, amount) => {
  * @param {String} account_number the account number of the account to be debited
  * @param {Number} amount the amount to be debited
  */
- const debit = async (account_number, amount) => {
+const debit = async (account_number, amount) => {
   return await Accounts.findOneAndUpdate(
     { account_number },
     { $inc: { account_balance: -amount } },
     { new: true }
   );
 };
-
 
 /**
  * Checks if the amount requested in the account
@@ -61,11 +60,23 @@ const deposit = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ transaction });
 };
 
-const withdrawal = async (req,res) => {
+const withdrawal = async (req, res) => {
   await checksAccount(req.body.sender, req.body.amount);
-  debit(req.body.sender, req.body.amount)
-  const transaction = await Transaction.create(req.body)
+  debit(req.body.sender, req.body.amount);
+  const transaction = await Transaction.create(req.body);
   res.status(StatusCodes.CREATED).json({ transaction });
-}
+};
 
-module.exports = { transfer, deposit, withdrawal };
+const transactionHistory = async (req, res) => {
+  const { sender, recipient } = req.query;
+  const queryObject = {};
+  if (sender) {
+    queryObject.sender = sender;
+  }
+  if (recipient) {
+    queryObject.recipient = recipient;
+  }
+  const transactions = await Transaction.find(queryObject);
+  res.status(StatusCodes.OK).json({ transactions });
+};
+module.exports = { transfer, deposit, withdrawal, transactionHistory };
