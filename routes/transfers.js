@@ -7,11 +7,13 @@ const {
   transfer,
   deposit,
   withdrawal,
-  transactionHistory
+  transactionHistory,
+  refund,
 } = require("../controllers/transfers.controller");
 
 transactionRouter.post("/", transfer);
-transactionRouter.post("/deposit", deposit)
-transactionRouter.post("/withdrawal", withdrawal)
+transactionRouter.post("/deposit", deposit);
+transactionRouter.post("/withdrawal", withdrawal);
+transactionRouter.put("/refund/:id", refund);
 transactionRouter.get("/", transactionHistory);
 module.exports = transactionRouter;

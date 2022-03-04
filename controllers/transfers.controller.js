@@ -67,6 +67,26 @@ const withdrawal = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ transaction });
 };
 
+const refund = async (req, res) => {
+  const {
+    params: { id: transactionID },
+  } = req;
+  const transaction = await Transaction.findOneAndUpdate(
+    { _id: transactionID },
+    { type: "Reversal" },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+  debit(transaction.recipient, transaction.amount)
+  credit(transaction.sender, transaction.amount)
+  if (!transaction) {
+    throw new NotFoundError(`No transaction occured with the id ${transactionID}`)
+}
+  res.status(StatusCodes.OK).json({ transaction });
+};
+
 const transactionHistory = async (req, res) => {
   const { sender, recipient } = req.query;
   const queryObject = {};
@@ -79,4 +99,4 @@ const transactionHistory = async (req, res) => {
   const transactions = await Transaction.find(queryObject);
   res.status(StatusCodes.OK).json({ transactions });
 };
-module.exports = { transfer, deposit, withdrawal, transactionHistory };
+module.exports = { transfer, deposit, withdrawal, transactionHistory, refund };
