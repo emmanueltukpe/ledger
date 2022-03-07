@@ -72,26 +72,25 @@ const refund = async (req, res) => {
     params: { id: transactionID },
   } = req;
   const { description, amount, recipient, sender, type } = req.body;
+
+  const oldTransaction = await Transaction.findById({ _id: transactionID });
+  if (!oldTransaction) throw new Error("transaction doesn't exist");
+
   const transaction = await Transaction.create({
     description,
     amount,
     recipient,
     sender,
     type,
-    reference_transaction: transactionID
+    reference_transaction: transactionID,
   });
-  await transaction.save();
-  const oldTransaction = await Transaction.findById({ _id: transactionID });
-  transaction.reference_transaction.push(oldTransaction);
-  await oldTransaction.save();
+
   await checksAccount(req.body.sender, req.body.amount);
   debit(req.body.sender, req.body.amount);
   credit(req.body.recipient, req.body.amount);
 
   res.status(StatusCodes.CREATED).json({ transaction });
 };
-
-
 
 const transactionHistory = async (req, res) => {
   const { sender, recipient } = req.query;
