@@ -14,6 +14,6 @@ const {
 transactionRouter.post("/", transfer);
 transactionRouter.post("/deposit", deposit);
 transactionRouter.post("/withdrawal", withdrawal);
-transactionRouter.post("/refund", refund);
+transactionRouter.post("/refund/:id", refund);
 transactionRouter.get("/", transactionHistory);
 module.exports = transactionRouter;

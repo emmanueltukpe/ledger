@@ -74,7 +74,7 @@ const refund = async (req, res) => {
   const { description, amount, recipient, sender, type } = req.body;
 
   const oldTransaction = await Transaction.findById({ _id: transactionID });
-  if (!oldTransaction) throw new Error("transaction doesn't exist");
+  if (!oldTransaction) throw new NotFoundError("transaction doesn't exist");
 
   const transaction = await Transaction.create({
     description,
