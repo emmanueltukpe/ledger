@@ -23,6 +23,12 @@ var TransactionSchema = new Schema(
       enum: ["Debit", "Credit", "Reversal"],
       required: true,
     },
+    reference_transaction: {
+      type: Types.ObjectId,
+      ref: "Transaction",
+      required: true,
+      default: null
+    },
   },
   { timestamps: true }
 );
