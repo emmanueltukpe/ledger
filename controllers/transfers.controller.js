@@ -5,10 +5,10 @@ const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, NotFoundError } = require("../errors");
 
 /**
- * Credits an account by an amount
+ * await credits an account by an amount
  *
- * @param {String} account_number the account number of the account to be credited
- * @param {Number} amount the amount to be credited
+ * @param {String} account_number the account number of the account to be await credited
+ * @param {Number} amount the amount to be await credited
  */
 const credit = async (account_number, amount) => {
   return await Accounts.findOneAndUpdate(
@@ -47,8 +47,8 @@ const checksAccount = async (account_number, amount) => {
 
 const transfer = async (req, res) => {
   await checksAccount(req.body.sender, req.body.amount);
-  debit(req.body.sender, req.body.amount);
-  credit(req.body.recipient, req.body.amount);
+  await debit(req.body.sender, req.body.amount);
+  await credit(req.body.recipient, req.body.amount);
   const transaction = await Transaction.create(req.body);
 
   res.status(StatusCodes.CREATED).json({ transaction });
@@ -56,13 +56,13 @@ const transfer = async (req, res) => {
 
 const deposit = async (req, res) => {
   const transaction = await Transaction.create(req.body);
-  credit(req.body.recipient, req.body.amount);
+  await credit(req.body.recipient, req.body.amount);
   res.status(StatusCodes.CREATED).json({ transaction });
 };
 
 const withdrawal = async (req, res) => {
   await checksAccount(req.body.sender, req.body.amount);
-  debit(req.body.sender, req.body.amount);
+  await debit(req.body.sender, req.body.amount);
   const transaction = await Transaction.create(req.body);
   res.status(StatusCodes.CREATED).json({ transaction });
 };
@@ -86,8 +86,8 @@ const refund = async (req, res) => {
   });
 
   await checksAccount(req.body.sender, req.body.amount);
-  debit(req.body.sender, req.body.amount);
-  credit(req.body.recipient, req.body.amount);
+  await debit(req.body.sender, req.body.amount);
+  await credit(req.body.recipient, req.body.amount);
 
   res.status(StatusCodes.CREATED).json({ transaction });
 };
